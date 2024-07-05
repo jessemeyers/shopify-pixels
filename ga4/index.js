@@ -21,8 +21,12 @@ const Analyzify = {
     let items = [];
     for (const item of lineItems) {
       items.push({
-        item_id: item.variant.product.id,
+        item_id: item.variant.sku, //Custom - Use SKU
         item_name: item.variant.product.title,
+        price: item.finalLinePrice.amount / item.quantity, //Custom - Add unit price after discounts have been applied
+        quantity: item.quantity, //Custom - Add Quantity
+        item_variant: item.variant.title, //Custom - Add Variant Title
+        discount: item.variant.price.amount - item.finalLinePrice.amount / item.quantity, //Custom - add unit discount amount
       })
     }
 
@@ -34,7 +38,7 @@ const Analyzify = {
     return {
       page_location: ctx.document.location.href,
       page_title: ctx.document.title,
-      language: ctx.language,
+      // language: ctx.language, // Custom disable language unless required for multi-market stores
     };
   },
 
@@ -43,8 +47,9 @@ const Analyzify = {
       currency: evt.data.productVariant.price.currencyCode,
       value: evt.data.productVariant.price.amount,
       items: [
-        { item_id: evt.data.productVariant.id,
-          item_name: evt.data.productVariant.product.title
+        { item_id: evt.data.productVariant.sku, // Custom - Use SKU
+          item_name: evt.data.productVariant.product.title,
+          item_variant: evt.data.cartLine.merchandise.title, 
         }
       ],
     };
@@ -60,13 +65,15 @@ const Analyzify = {
   getAddToCartData(evt) {
     return {
       currency: evt.data.cartLine.merchandise.price.currencyCode,
-      value: evt.data.cartLine.merchandise.price.amount,
-      items: [
-        { item_id: evt.data.cartLine.merchandise.id,
-          item_name: evt.data.cartLine.merchandise.product.title
-        }
-      ],
-    };
+      value: evt.data.cartLine.merchandise.price.amount * evt.data.cartLine.quantity, // Custom - multiply price by quantity to get total value
+      items: [{ 
+        item_id: evt.data.cartLine.merchandise.sku, 
+        item_name: evt.data.cartLine.merchandise.product.title, 
+        price: evt.data.cartLine.merchandise.price.amount, 
+        quantity: evt.data.cartLine.quantity,
+        item_variant: evt.data.cartLine.merchandise.title,
+        }], // Custom - Use SKU for item id and add paramters for price, quantity, and variant title
+    }
   },
 
   getPaymentInfoData(evt) {
