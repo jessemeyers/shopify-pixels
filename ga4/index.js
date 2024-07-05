@@ -1,4 +1,4 @@
-// Analyzify Shopify Pixels - GA4 v1.0 - learn more on https://analyzify.app/shopify-pixels
+// Analyzify Shopify Pixels - GA4 v1.0 - learn more on https://analyzify.app/shopify-pixels - Customizations on https://github.com/jessemeyers/shopify-pixels
 // DO NOT forget updating G-XXXXXXXXXX with your own GA4 measurement ID - learn more on https://docs.analyzify.app/find-your-google-analytics-tracking-id
 const TRACKING_ID = "G-XXXXXXXXXX";
 const script = document.createElement("script");
@@ -49,7 +49,7 @@ const Analyzify = {
       items: [
         { item_id: evt.data.productVariant.sku, // Custom - Use SKU
           item_name: evt.data.productVariant.product.title,
-          item_variant: evt.data.cartLine.merchandise.title, 
+          item_variant: evt.data.productVariant.title, 
         }
       ],
     };
