@@ -1,5 +1,6 @@
 // Analyzify Shopify Pixels - GA4 v1.0 - learn more on https://analyzify.app/shopify-pixels - Customizations on https://github.com/jessemeyers/shopify-pixels
 // DO NOT forget updating G-XXXXXXXXXX with your own GA4 measurement ID - learn more on https://docs.analyzify.app/find-your-google-analytics-tracking-id
+// https://developers.google.com/analytics/devguides/collection/ga4/reference/events?client_type=gtag#purchase
 const TRACKING_ID = "G-XXXXXXXXXX";
 const script = document.createElement("script");
 script.setAttribute(
