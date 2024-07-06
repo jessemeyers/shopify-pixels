@@ -27,6 +27,7 @@ const Analyzify = {
         quantity: item.quantity, //Custom - Add Quantity
         item_variant: item.variant.title, //Custom - Add Variant Title
         discount: item.variant.price.amount - item.finalLinePrice.amount / item.quantity, //Custom - add unit discount amount
+        item_category: item.variant.product.type, // Custom - Add item_category
       })
     }
 
@@ -49,7 +50,8 @@ const Analyzify = {
       items: [
         { item_id: evt.data.productVariant.sku, // Custom - Use SKU
           item_name: evt.data.productVariant.product.title,
-          item_variant: evt.data.productVariant.title, 
+          item_variant: evt.data.productVariant.title, // Custom - Add variant title
+          item_category: evt.data.productVariant.product.type, // Custom - Add item_category
         }
       ],
     };
@@ -72,14 +74,15 @@ const Analyzify = {
         price: evt.data.cartLine.merchandise.price.amount, 
         quantity: evt.data.cartLine.quantity,
         item_variant: evt.data.cartLine.merchandise.title,
-        }], // Custom - Use SKU for item id and add paramters for price, quantity, and variant title
+        item_category: evt.data.cartLine.merchandise.product.type,
+        }], // Custom - Use SKU for item id and add paramters for price, quantity, variant title, type
     }
   },
 
   getPaymentInfoData(evt) {
     return {
       currency: evt.data.checkout.currencyCode,
-      value: evt.data.checkout.totalPrice.amount,
+      value: evt.data.checkout.subtotalPrice.amount, // Custom - use subtotal
       items: this.getItemsFromLineItems(evt.data.checkout.lineItems),
     };
   },
@@ -87,7 +90,7 @@ const Analyzify = {
   getCheckoutData(evt) {
     return {
       currency: evt.data.checkout.currencyCode,
-      value: evt.data.checkout.totalPrice.amount,
+      value: evt.data.checkout.subtotalPrice.amount, // Custom - use subtotal
       items: this.getItemsFromLineItems(evt.data.checkout.lineItems),
     };
   },
@@ -96,8 +99,10 @@ const Analyzify = {
     return {
       transaction_id: evt.data.checkout.order.id,
       currency: evt.data.checkout.currencyCode,
-      value: evt.data.checkout.totalPrice.amount,
+      value: evt.data.checkout.subtotalPrice.amount, // Custom - use subtotal
       items: this.getItemsFromLineItems(evt.data.checkout.lineItems),
+      shipping: evt.data.checkout.shippingLine.price.amount, // Custom - add shipping
+      tax:evt.data.checkout.totalTax, // Custom - add total tax
     };
   },
 };
